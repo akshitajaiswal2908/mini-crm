@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mysql:*)",
+      "Bash(timeout 45 ./mvnw spring-boot:run:*)",
+      "Bash(timeout 60 ./mvnw spring-boot:run:*)",
+      "Bash(lsof:*)",
+      "Bash(ps:*)",
+      "Bash(./mvnw compile:*)",
+      "Bash(./mvnw spring-boot:run 2>&1 | tail -60)",
+      "Bash(wc -l /Users/senseadmin/crm/src/main/java/com/example/crm/**/*.java | tail -1)",
+      "Bash(grep -r \"TODO\\\\|FIXME\\\\|XXX\\\\|HACK\" src/main/java --include=\"*.java\" 2>/dev/null | head -20)",
+      "Bash(ssh-keygen -t ed25519 -C \"akshitajaiswal2908@gmail.com\" -f ~/.ssh/id_personal -N \"\")",
+      "Bash(git init:*)"
+    ]
+  }
+}
