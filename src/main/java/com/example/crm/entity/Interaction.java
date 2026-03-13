@@ -1,41 +1,46 @@
 package com.example.crm.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "interactions")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class Interaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
+    @ManyToOne
+    @JoinColumn(name = "job_id", nullable = false)
+    private Job job;
 
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+    @ManyToOne
+    @JoinColumn(name = "lead_id", nullable = false)
+    private Lead lead;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Column(name = "interaction_type", nullable = false)
+    private String interactionType;
 
-    @Column(nullable = false)
-    private String phone;
+    @Column(columnDefinition = "TEXT")
+    private String notes;
 
-    @Column(nullable = false)
-    private String password;
+    @ManyToOne
+    @JoinColumn(name = "created_by", nullable = false)
+    private User createdBy;
+
+    @Column(name = "is_active", nullable = false)
+    @Builder.Default
+    private boolean isActive = true;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -44,8 +49,4 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "createdBy")
-    private List<Lead> leads;
-
 }
