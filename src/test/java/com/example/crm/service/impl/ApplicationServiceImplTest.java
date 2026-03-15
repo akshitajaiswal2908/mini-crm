@@ -2,6 +2,7 @@ package com.example.crm.service.impl;
 
 import com.example.crm.dto.request.ApplyForJobRequest;
 import com.example.crm.dto.response.ApplicationResponse;
+import com.example.crm.dto.response.CandidateResponse;
 import com.example.crm.entity.Application;
 import com.example.crm.entity.Candidate;
 import com.example.crm.entity.Job;
@@ -227,6 +228,76 @@ class ApplicationServiceImplTest {
         ApplicationResponse result = applicationService.applyForJob(jobId, request, email);
         assertEquals(result, applicationResponse);
     }
+
+
+
+    @Test
+    public void getJobCandidatesJobNotFoundTest(){
+        Long JobId = 1L;
+        when(jobRepository.existsById(JobId)).thenReturn(false);
+        assertThrows(ResourceNotFoundException.class, () -> applicationService.getJobCandidates(JobId));
+    }
+
+    @Test
+    public void getJobCandidatesFineTest(){
+        Long JobId = 1L;
+
+        Candidate candidate1 = Candidate.builder().id(1L).build();
+        Candidate candidate2 = Candidate.builder().id(2L).build();
+
+        List<Candidate> res1 = new ArrayList<>();
+        res1.add(candidate1);
+        res1.add(candidate2);
+
+        CandidateResponse candidateResponse1 = CandidateResponse.builder().id(1L).build();
+        CandidateResponse candidateResponse2 = CandidateResponse.builder().id(2L).build();
+
+        List<CandidateResponse> res2 = new ArrayList<>();
+        res2.add(candidateResponse1);
+        res2.add(candidateResponse2);
+
+
+        when(jobRepository.existsById(JobId)).thenReturn(true);
+        when(applicationRepository.findCandidatesByJobId(JobId)).thenReturn(res1);
+        when(candidateMapper.toResponse(candidate1)).thenReturn(candidateResponse1);
+        when(candidateMapper.toResponse(candidate2)).thenReturn(candidateResponse2);
+        assertEquals(applicationService.getJobCandidates(JobId), res2);
+    }
+
+
+    @Test
+    public void getCandidateApplicationsCandidateNotFound(){
+        Long candidateId = 1L;
+        when(candidateRepository.existsById(candidateId)).thenReturn(false);
+        assertThrows(ResourceNotFoundException.class , ()-> applicationService.getCandidateApplications(candidateId));
+    }
+
+    @Test
+    public void getCandidateApplicationsFineTest(){
+        Long candidateId = 1L;
+
+        Application application1 = Application.builder().id(1L).build();
+        Application application2 = Application.builder().id(2L).build();
+
+        List<Application> res1 = new ArrayList<>();
+        res1.add(application1);
+        res1.add(application2);
+
+        ApplicationResponse applicationResponse1 = ApplicationResponse.builder().id(1L).build();
+        ApplicationResponse applicationResponse2 = ApplicationResponse.builder().id(2L).build();
+
+        List<ApplicationResponse> res2 = new ArrayList<>();
+        res2.add(applicationResponse1);
+        res2.add(applicationResponse2);
+
+        when(applicationRepository.findAllByCandidateIdAndIsActiveTrue(candidateId)).thenReturn(res1);
+        when(candidateRepository.existsById(candidateId)).thenReturn(true);
+        when(applicationMapper.toResponse(application1)).thenReturn(applicationResponse1);
+        when(applicationMapper.toResponse(application2)).thenReturn(applicationResponse2);
+        assertEquals(applicationService.getCandidateApplications(candidateId), res2);
+
+    }
+
 
 
 
