@@ -1,12 +1,13 @@
 package com.example.crm.dto.request;
 
+import com.example.crm.entity.LeadStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class CreateUserRequest {
+public class CreateLeadRequest {
 
     @NotBlank(message = "First name is required")
     private String firstName;
@@ -21,7 +22,10 @@ public class CreateUserRequest {
     @NotBlank(message = "Phone is required")
     private String phone;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 8, message = "Password must be at least 8 characters")
-    private String password;
+    @NotNull(message = "Status is required")
+    private LeadStatus status;
+
+    @NotBlank(message = "Source is required")
+    private String source;
+
 }

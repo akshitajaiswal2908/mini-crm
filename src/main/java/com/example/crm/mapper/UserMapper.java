@@ -25,8 +25,8 @@ public class UserMapper {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .phone(user.getPhone())
-                .createdOn(user.getCreatedOn())
-                .updatedOn(user.getUpdatedOn())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 }
